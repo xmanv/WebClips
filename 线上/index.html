@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>APP下载</title>
+  <script type="text/javascript" charset="UTF-8" src="./APP下载_files/jquery.min.js.download"></script>
+<style type="text/css">
+  /** 清除内外边距 **/
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote,dl, dt, dd, ul, ol, li,pre,form, fieldset, legend, button, input, textarea, 
+th, td ,img {margin: 0;padding: 0;}
+  body,html{
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  #wechatBg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    background: url(../app/openres/wapbg.jpg) no-repeat;
+    background-size: 100% 100%;
+  }
+  #ios{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    background: url(../app/openres/noiosnew.jpg) no-repeat;
+    background-size: 100% 100%;
+  }
+  #ios img{
+    width: 100%;
+  }
+  #ios .img1{
+    width: 85%;
+    display: block;
+    margin: 25% auto 0;
+  }
+  #ios .img2{
+    width: 85%;
+    display: block;
+    margin: 7.5% auto 0;
+  }
+  #ios .img3{
+    width: 85%;
+    display: block;
+    margin: 20% auto 0;
+  }
+  .TrusIos{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    /*padding-top: 10%;*/
+    background: #b2b2b2;
+    background-size: 100% 100%;
+  }
+  .TrusIos .contain{
+    max-width: 750px;
+    margin: 0 auto;
+    height: 500px;
+
+    /*background-color: red;*/
+  }
+  .TrusIos .contain .main{
+    width: 85%;
+    margin: 0 auto;
+  }
+  .TrusIos .contain img{
+    width: 100%;
+  }
+  .TrustNow{
+     width: 90%;
+     height: 45px;
+     border-radius: 45px;
+     background: #b63030;
+     line-height: 45px;
+     color: #ffffff;
+     font-size: 16px;
+     text-align: center;
+     margin: 10px auto;
+     display: block;
+     text-decoration: none;
+  }
+</style><style type="text/css">
+  .figureContainer {
+            width: 100%;
+            height: auto;
+            overflow: display;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .figureContainer img {
+            width: 100%;
+        }
+
+        #imgList {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #imgList li {
+            width: 100%;
+            height: auto;
+            float: left;
+        }
+
+        #buttonList {
+            display: flex;
+            width: 100%;
+            justify-content: start;
+            /*border-bottom: 2px solid #dbdbdb;*/
+        }
+
+        #buttonList li {
+            width: 25%;
+            height: 35px;
+            background: #ececee;
+            line-height: 35px;
+            margin: 0px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #buttonList .curIndex {
+            background: #b63030;
+            color:#ffffff;
+        }
+
+        #prev img,
+        #next img {
+            width: 30px;
+            cursor: pointer;
+        }
+
+        #prev img {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+
+        #next img {
+            position: absolute;
+            right: -50px;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+</style><style type="text/css">
+  .main img ,.FigureContainer img,.contain img,.img{
+    display: block;
+    width: 100%;
+  }
+</style></head>
+
+
+
+
+<body>
+    <div style="height: 0;overflow: hidden;">
+        <a href="javascript:;" id="downloadButton"></a>
+    </div>
+    <div id="wechatBg" style="display: none;"></div>
+    <div id="ios" style="display: none;">
+        <img class="img1" src="./APP下载_files/toplogo.png" alt="">
+        <a href="https://www.xmanv.com/home/index class="jumpLink"><img class="img2" src="./APP下载_files/button.png" alt=""></a>
+        <img class="img3" src="./APP下载_files/bto.png" alt="">
+    </div>
+    <div class="TrusIos" id="TrusIos" style="display: none;">
+        <div class="contain">
+                <div class="main">
+                    <div class="FigureContainer" id="FigureContainer">
+                        <ul type="none" id="buttonList" style="height: 0;overflow: hidden;">
+                            <li class="curIndex">信任提醒</li>
+                            <li>设置/通用</li>
+                            <li>描述文件</li>
+                            <li>信任证书</li>
+                        </ul>
+                        <ul type="none" id="imgList">
+                            <li><img id="picture" src="./APP下载_files/images1.png"></li>
+                        </ul>
+                    </div>
+                <div>
+              </div>
+          </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    var data = OpenInstall.parseUrlParams();
+    // 获取浏览器信息START
+    var browser = {
+     versions: function () {
+          var u = navigator.userAgent, app = navigator.appVersion;
+          return {   //移动终端浏览器版本信息
+             trident: u.indexOf('Trident') > -1, //IE内核
+             presto: u.indexOf('Presto') > -1, //opera内核
+             webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+             gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+             mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+             ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+             android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+             iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+             iPad: u.indexOf('iPad') > -1, //是否iPad
+             webApp: u.indexOf('Safari') == -1 ,//是否web应该程序，没有头部与底部
+             isSafari: u.indexOf('AppleWebKit') > -1 && u.indexOf('Mobile') > -1 && u.indexOf('Safari/604.1') > -1&& !(u.indexOf('MQQBrowser') > -1) ,//是否是safari浏览器打开
+          };
+          }(),
+         language: (navigator.browserLanguage || navigator.language).toLowerCase()
+      };
+      // alert(navigator.userAgent)
+    // 获取浏览器信息END
+    // 轮播START
+    function TabScroll() {
+            var imgSrcs = [];
+            var prevBt = document.getElementById('prev');
+            var nextBt = document.getElementById('next');
+            var pic = document.getElementById('picture');
+            var buttons = document.getElementById('buttonList').getElementsByTagName('li');
+            var container = document.getElementById('FigureContainer');
+            var PREV_HANDLER = false;
+            var NEXT_HANDLER = true;
+            var cur = 1;
+            var i = 0;
+            for (i = 0; i < 3; i++) {
+                imgSrcs.push('../app/openres/images' + (i + 1) + '.png');
+                (function (index) {
+                    buttons[index].addEventListener('click', function () {
+                        var prevIndex = cur;
+                        cur = index + 1;
+                        buttons[prevIndex - 1].classList.toggle('curIndex');
+                        buttons[cur - 1].classList.toggle('curIndex');
+                        pic.src = imgSrcs[cur - 1];
+                    })
+                })(i);
+            }
+            var handler = function (flag) {
+                var prevIndex = cur;
+                if (flag === PREV_HANDLER) {
+                    if (cur === 1) {
+                        cur = 3;
+                    } else {
+                        cur--;
+                    }
+                } else {
+                    if (cur === 3) {
+                        cur = 1;
+                    } else {
+                        cur++;
+                    }
+                }
+                buttons[prevIndex - 1].classList.toggle('curIndex');
+                buttons[cur - 1].classList.toggle('curIndex');
+                pic.src = imgSrcs[cur - 1];
+            }
+            var prevBtHandler = handler.bind(null, PREV_HANDLER);
+            var nextBthandler = handler.bind(null, NEXT_HANDLER);
+            timer = setInterval(nextBthandler, 3000);
+            container.addEventListener('touchstart', function () {
+                if (timer) {
+                    clearInterval(timer);
+                }
+            });
+            container.addEventListener('touchmove', function () {
+                if (timer) {
+                    clearInterval(timer);
+                }
+            });
+            container.addEventListener('touchend', function () {
+                timer = setInterval(nextBthandler, 3000);
+            })
+        }
+    // 轮播END
+    // 调用OpeninstallSRAT
+    function startOpen(){
+        new OpenInstall({
+            appKey : "jkee8f",
+            preferWakeup:true,
+            onready : function() {
+                var m = this, button = document.getElementById("downloadButton");
+                m.schemeWakeup();
+                button.onclick = function() {
+                    m.wakeupOrInstall();
+                    return false;
+                }()
+            },
+
+        }, data);
+    };
+    // 调用OpeninstallEND
+    // 处理浏览器跳转问题START
+    var channelCodemsg=location.pathname.replace(/\//g,"");
+    var agentUrl=""
+    if(channelCodemsg.lastIndexOf("_")>0){
+        agentUrl=channelCodemsg.split("_")[1];
+        channelCodemsg=channelCodemsg.split("_")[0];
+    }
+    var redirectUrl="https://www.xmanv.com/home/index";
+    var androidredirectUrl="https://www.xmanv.com/home/index";
+
+    var androidliveredirectUrl="https://www.xmanv.com/home/index";
+
+    var iosredirectUrl="https://www.xmanv.com/home/index";
+
+    var iosliveredirectUrl="https://www.xmanv.com/home/index";
+    
+    if (browser.versions.mobile) {
+      var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+      if (ua.match(/MicroMessenger/i) == "micromessenger"||ua.match(/WeiBo/i) == "weibo") {
+         document.getElementById("wechatBg").style.display='block';
+      }else{
+        if (location.href.lastIndexOf("?")>0) {
+          if (browser.versions.android) {
+             startOpen();
+          }
+        }else{
+          if(browser.versions.android){
+          		if(channelCodemsg.substring(0,2)=='ag'||channelCodemsg.substring(0,2)=='dj'){
+            			 // if(channelCodemsg=="dj"){
+  		            //       redirectUrl="http://download.18lh8.com/dj?channelCode=dj";
+  		            //   }else{
+  		            //       redirectUrl="http://download.18lh8.com/ag?channelCode=ag&agname="+channelCodemsg.substring(2,);
+  		            //   }
+                  if(channelCodemsg.length>3){
+                      androidredirectUrl=androidredirectUrl+"?AgentUserName="+channelCodemsg.substring(2,);
+                  }
+		              if(!(ua.match(/MicroMessenger/i) == "micromessenger")){
+		                  location.href=androidredirectUrl;
+		              } 
+          		}
+              if(channelCodemsg.substring(0,2)=='zb'){
+                  if(channelCodemsg.length>3){
+                      androidliveredirectUrl=androidliveredirectUrl+"?AgentUserName="+channelCodemsg.substring(2,);
+                  }
+                  if(!(ua.match(/MicroMessenger/i) == "micromessenger")){
+                      location.href=androidliveredirectUrl;
+                  } 
+              }
+          		if(channelCodemsg.substring(0,2)=='ia'){
+          			if(channelCodemsg.length>3){
+          					androidredirectUrl=androidredirectUrl+"?AgentUserName="+channelCodemsg.substring(2,);
+			              if(!(ua.match(/MicroMessenger/i) == "micromessenger")){
+			                  location.href=androidredirectUrl;
+			              } 
+          			}else{
+                    if(!(ua.match(/MicroMessenger/i) == "micromessenger")){
+                        location.href=androidredirectUrl;
+                    }   
+          			}
+          		}
+          }
+          if(browser.versions.ios){
+          	if(channelCodemsg.substring(0,2)=='ag'||channelCodemsg.substring(0,2)=='dj'){
+          		// if(agentUrl){
+		          //     $("#ios").show();
+		          //     var urls='https://'+agentUrl
+		          //     $(".jumpLink").attr("href",urls)
+		          //     setTimeout(function(){
+		          //         location.href=urls
+		          //     },3500)
+		          //   }else{
+		            // location.href="https://www.iosapp88.com/download/5d63c65be3241.html"; 
+                if(channelCodemsg.length>3){
+                    iosredirectUrl=iosredirectUrl+"&AgentUserName="+channelCodemsg.substring(2,)              
+                    location.href=iosredirectUrl 
+                  }else{
+                    location.href=iosredirectUrl;
+                  }
+	            // }   
+          	}else if(channelCodemsg.substring(0,2)=='ia'){
+          		if(channelCodemsg.length>3){
+          			iosredirectUrl=iosredirectUrl+"&AgentUserName="+channelCodemsg.substring(2,)              
+             		location.href=iosredirectUrl 
+          		}else{
+          			location.href=iosredirectUrl;
+          		}
+          	}else if(channelCodemsg.substring(0,2)=='zb'){
+              if(channelCodemsg.length>3){
+                iosliveredirectUrl=iosliveredirectUrl+"&AgentUserName="+channelCodemsg.substring(2,)              
+                location.href=iosliveredirectUrl 
+              }else{
+                location.href=iosliveredirectUrl;
+              }
+            } else if(channelCodemsg.substring(0,2)=='in'){
+              if(channelCodemsg.length>3){
+                iosredirectUrl=iosredirectUrl+"&InvitName="+channelCodemsg.substring(2,)              
+                location.href=iosredirectUrl 
+              }else{
+                location.href=iosredirectUrl;
+              }
+            }else{
+
+              location.href=iosredirectUrl;
+              
+            }
+                   
+          }
+                 
+        }
+      }
+    } else {
+      location.href=androidredirectUrl;
+    	// if(channelCodemsg.substring(0,2)=='ag'||channelCodemsg.substring(0,2)=='dj'){
+    	// 	// startOpen();
+        
+    	// }
+	    // if(channelCodemsg.substring(0,2)=='ia'){
+	    //   	if(!browser.versions.ios){
+		   //      location.href=androidredirectUrl;
+		   //  }
+	    //  }
+      
+    };
+    // 处理浏览器跳转问题END
+
+</script></body></html>

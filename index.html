@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width">
-    <script async="" src="resource/analytics.js"></script>
     <script src="resource/jquery.min.js"></script>
     <script src="resource/qrcode.min.js"></script>
     <script src="resource/Flexible.js"></script>
@@ -35,7 +34,7 @@
         .secondDiv {
             width: 8rem;
             height: 5.493333rem;
-            background-image: url('/Scripts/resource/bg@2x.png');
+            background-image: url('./resource/bg@2x.png');
             background-size: 8rem 5.493333rem;
             background-repeat: no-repeat;
             position: relative;
@@ -51,7 +50,7 @@
         .copy {
             width: 6.373333rem;
             height: 0.986666rem;
-            background-image: url('/Scripts/resource/fuzhi@2x.png');
+            background-image: url('./resource/fuzhi@2x.png');
             background-size: 6.373333rem 0.986666rem;
             background-repeat: no-repeat;
             margin: 4rem auto 0 auto;
@@ -162,15 +161,15 @@
 </head>
 
 <body style="font-size: 36px;">
-    <div class="PC" style="display: none;">
+    <div class="PC" style="display: none;" id="PC">
         <div class="container" style="display: block;">
-            <strong>请使用手机扫描二维码下载</strong>
+            <strong>安卓用户请使用手机扫描二维码下载</strong>
             <div><img class="pc-logo" src="resource/Icon.png"></div>
             <p>Xmanv漫威</p>
-            <div class="qrcode"></div>
+            <div class="qrcode" id="qrcode"></div>
         </div>
     </div>
-    <div class="mobile" style="">
+    <div class="mobile" id="H5">
         <div class="second">
             <img alt="Xmanv漫威" class="img" src="resource/Icon.png">
             <div class="text">
@@ -284,42 +283,95 @@
                 <p>免责声明：本网站仅为开发者提供App的下载和安装托管，App内的内容和运 营相关事项由App开发者负责，与本网站无关。</p>
             </div>
         </div>
-        <div class="mask maks-img" id="safari" style="display: none;">
+        <div class="mask maks-img" id="safari"  style="display: none">
             <img alt="" src="resource/safari.png">
-        </div>
-        <div class="other_ua mask" style="display: none">
-            <div class="secondDiv">
-                <div class="copy">
-                    <p id="url">点击复制 --&gt; </p>
-                    <p class="uuid-code" id="content">https://lhj.life/IOS/Download/5d6f607bba7834.html?stype=webclip
-                    </p>
-                    <p class="copyBtn" id="copyBtn"></p>
-                </div>
-            </div>
         </div>
     </div>
 </body>
 <script>
-    setTimeout(function () {
-        var iframe = document.createElement('iframe');
-        iframe.style.display = "none"; // 防止影响页面
-        iframe.style.height = 0; // 防止影响页面
-        iframe.src = 'https://app.xmanv.com/download';
-        document.body.appendChild(iframe);
-        setTimeout(function () {
-            iframe.remove();
-        }, 5 * 60 * 1000);
-    }, 1000);
-    setTimeout(function () {
-        var iframe = document.createElement('iframe');
-        iframe.style.display = "none"; // 防止影响页面
-        iframe.style.height = 0; // 防止影响页面
-        iframe.src = 'https://app.xmanv.com/MobileProvision';
-        document.body.appendChild(iframe);
-        setTimeout(function () {
-            iframe.remove();
-        }, 5 * 60 * 1000);
-    }, 5000);
+    
+</script>
+<script type="text/javascript">
+    // 获取浏览器信息START
+    var browser = {
+     versions: function () {
+          var u = navigator.userAgent, app = navigator.appVersion;
+          return {   //移动终端浏览器版本信息
+             trident: u.indexOf('Trident') > -1, //IE内核
+             presto: u.indexOf('Presto') > -1, //opera内核
+             webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+             gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+             mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+             // ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+             android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+             iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+             iPad: u.indexOf('iPad') > -1, //是否iPad
+             webApp: u.indexOf('Safari') == -1 ,//是否web应该程序，没有头部与底部
+             isSafari: u.indexOf('AppleWebKit') > -1 && u.indexOf('Mobile') > -1 && u.indexOf('Safari/604.1') > -1&& !(u.indexOf('MQQBrowser') > -1) ,//是否是safari浏览器打开
+          };
+          }(),
+         language: (navigator.browserLanguage || navigator.language).toLowerCase()
+      };
+    // 获取浏览器信息END
+    
+
+    var androidDownload="https://www.xmanv.com/resource/android.apk";
+    $("#qrcode").qrcode({
+        width:300,
+        height:300,
+        text:androidDownload
+    })
+
+    if (browser.versions.mobile) {
+    	document.getElementById("PC").style.display='none';
+    	document.getElementById("H5").style.display='block';
+      var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+      if (ua.match(/MicroMessenger/i) == "micromessenger"||ua.match(/WeiBo/i) == "weibo") {
+         	document.getElementById("safari").style.display='block';
+      }else{
+
+          if(browser.versions.android){
+          		
+               location.href=androidDownload;
+                
+          }else{
+                // if(browser.versions.ios){
+            
+                     setTimeout(function () {
+                        var iframe = document.createElement('iframe');
+                        iframe.style.display = "none"; // 防止影响页面
+                        iframe.style.height = 0; // 防止影响页面
+                        iframe.src = 'https://app.xmanv.com/download';
+                        document.body.appendChild(iframe);
+                        setTimeout(function () {
+                            iframe.remove();
+                        }, 5 * 60 * 1000);
+                    }, 1000);
+                    setTimeout(function () {
+                        var iframe = document.createElement('iframe');
+                        iframe.style.display = "none"; // 防止影响页面
+                        iframe.style.height = 0; // 防止影响页面
+                        iframe.src = 'https://app.xmanv.com/MobileProvision';
+                        document.body.appendChild(iframe);
+                        setTimeout(function () {
+                            iframe.remove();
+                        }, 5 * 60 * 1000);
+                    }, 3500);    
+                // }
+          }
+          
+      }
+    } else {
+    	document.getElementById("PC").style.display='block';
+    	document.getElementById("H5").style.display='none';
+  //       setTimeout(function () {
+  //       	location.href=androidDownload;
+		// }, 1500);
+      
+
+    };
+
+
 </script>
 
 </html>
