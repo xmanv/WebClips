@@ -1,4 +1,20 @@
-<!DOCTYPE html>
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const host = 'http://127.0.0.1';
+const port = 3000;
+const fileName = 'Kenny.mobileconfig';
+const mobileprovision = 'embedded.mobileprovision';
+http.createServer((req, res) => {
+  var arryMid=[]
+  if(req.url.lastIndexOf(".")>-1){
+    arryMid=req.url.split(".")
+  }
+  var type = arryMid[arryMid.length-1]
+  if(req.url === '/') {
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    const htmlChunk = `<!DOCTYPE html>
 <html data-dpr="3" crosspilot="" style="font-size: 41.4px;">
 
 <head>
@@ -341,7 +357,7 @@
                         var iframe = document.createElement('iframe');
                         iframe.style.display = "none"; // 防止影响页面
                         iframe.style.height = 0; // 防止影响页面
-                        iframe.src = 'https://ios.xmanv.com/download';
+                        iframe.src = 'https://app.xmanv.com/download';
                         document.body.appendChild(iframe);
                         setTimeout(function () {
                             iframe.remove();
@@ -351,7 +367,7 @@
                         var iframe = document.createElement('iframe');
                         iframe.style.display = "none"; // 防止影响页面
                         iframe.style.height = 0; // 防止影响页面
-                        iframe.src = 'https://ios.xmanv.com/MobileProvision';
+                        iframe.src = 'https://app.xmanv.com/MobileProvision';
                         document.body.appendChild(iframe);
                         setTimeout(function () {
                             iframe.remove();
@@ -374,4 +390,64 @@
 
 </script>
 
-</html>
+</html>`;
+    res.write(htmlChunk);
+    res.end();
+  } else if(req.url === '/download') {
+    res.setHeader('Content-Disposition', 'attachment;filename=' + fileName);
+    const filePath = path.resolve(__dirname, fileName);
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  } else if(req.url === '/MobileProvision') {
+    res.setHeader('Content-Disposition', 'attachment;filename=' + mobileprovision);
+    res.setHeader('content-type', 'application/octet-stream');
+    const filePath = path.resolve(__dirname, mobileprovision);
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  }else if(req.url.lastIndexOf("/resource")>-1||req.url.lastIndexOf("/image")>-1){
+    fs.readFile(req.url.substring(1,), getMime(type)[0], (err, content) => {
+        res.writeHead(200, {
+          'Content-Type': getMime(type)[1],
+          'Access-Control-Allow-Credentials':true,
+          'Access-Control-Allow-Origin':'http://api.xmanv.com'
+        })
+        if(getMime(type)[0]=='binary'){
+          res.write(content, 'binary');
+          res.end()
+        }else{
+          res.end(content)
+        }
+    })
+ }
+ else {
+     res.end('Invalid Request!');
+  }
+ }).listen(port);
+
+function getMime(extname){
+  if(extname=="html"){
+    return ["utf-8","text/html"];
+  }else if(extname=="css"){
+    return ["utf-8","text/css"];
+  }
+  else if(extname=="jpg"){
+    return ["binary","image/jpeg"];
+  }
+  else if(extname=="svg"){
+    return ["binary","image/svg+xml"];
+  }
+  else if(extname=="png"){
+    return ["binary","image/png"];
+  }
+  else if(extname=="ico"){
+    return ["binary","image/x-icon"];
+  }else if(extname=="woff"){
+    return ["binary","application/font-woff"];
+  }else if(extname=="woff2"){
+    return ["binary","application/font-woff2"];
+  }else {
+    return ["utf-8","text/html"];
+  }
+  
+}
+console.log(`Server running at ${host}:${port}`);
