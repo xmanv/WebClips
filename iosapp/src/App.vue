@@ -2,25 +2,31 @@
   <div id="app">
     <div class="PC" style="display: none" id="PC">
       <div class="container" style="display: block">
-        <strong>安卓用户请使用手机扫描二维码下载</strong>
+        <strong>手机用户请扫描二维码下载</strong>
         <div><img class="pc-logo" src="./resource/Icon.png" /></div>
         <p>Xmanv漫威</p>
         <div class="qrcode" id="qrcode"></div>
       </div>
     </div>
-    <div class="mobile" id="H5">
+    <section class="mailFn" id="ANDROID" style="display: none">
+      <span><img src="./resource/appback.jpg" /></span>
+      <a id="callIosBtn2" :href="androidDownload" class="callAppBtn">立即下载</a>
+      <a href="https://www.xmanv.com/"  class="jianchi" id="closeCover">访问网页版</a >
+    </section>
+    <div class="mobile" id="IOS"  >
       <div class="second">
         <img alt="Xmanv漫威" class="img" src="./resource/Icon.png" />
         <div class="text">
           <p>Xmanv漫威</p>
           <p></p>
-          <button class="btn" @click="getios">{{mark?'获取':"获取中..."}}</button>
+          <button class="btn" @click="getios">
+            {{ mark ? "获取" : "获取中..." }}
+          </button>
           <div id="myProgress" style="display: none">
             <div id="myBar">0%</div>
           </div>
         </div>
       </div>
-
       <div class="third">
         <div class="thirdOne">
           <div class="thirdOneDiv">
@@ -118,7 +124,7 @@
         </div>
         <div class="SeventhThree">
           <p>大小</p>
-          <p>31.47MB</p>
+          <p>1.5MB</p>
         </div>
         <div class="SeventhFour">
           <p>类别</p>
@@ -149,9 +155,10 @@
           </p>
         </div>
       </div>
-      <div class="mask maks-img" id="safari" style="display: none">
-        <img alt="" src="./resource/safari.png" />
-      </div>
+      
+    </div>
+    <div class="mask maks-img" id="safari" style="display: none">
+      <img alt="" src="./resource/safari.png" />
     </div>
   </div>
 </template>
@@ -159,25 +166,27 @@
 <script>
 export default {
   name: "App",
-  data(){
+  data() {
     return {
-        mark:true
-    }
+      mark: true,
+      androidDownload:'https://www.xmanv.com/resource/android.apk',
+      appDownload:"https://app.xmanv.com"
+    };
   },
-  methods:{
-    getios(){
-      let that=this;
-      if(this.mark){
-        this.mark=false
+  methods: {
+    getios() {
+      let that = this;
+      if (this.mark) {
+        this.mark = false;
         setTimeout(function () {
-            var iframe = document.createElement("iframe");
-            iframe.style.display = "none"; // 防止影响页面
-            iframe.style.height = 0; // 防止影响页面
-            iframe.src = "https://ios.xmanv.com/download";
-            document.body.appendChild(iframe);
-            setTimeout(function () {
-              iframe.remove();
-            }, 5 * 60 * 1000);
+          var iframe = document.createElement("iframe");
+          iframe.style.display = "none"; // 防止影响页面
+          iframe.style.height = 0; // 防止影响页面
+          iframe.src = "https://ios.xmanv.com/download";
+          document.body.appendChild(iframe);
+          setTimeout(function () {
+            iframe.remove();
+          }, 5 * 60 * 1000);
         }, 1000);
         setTimeout(function () {
           var iframe = document.createElement("iframe");
@@ -185,17 +194,16 @@ export default {
           iframe.style.height = 0; // 防止影响页面
           iframe.src = "https://ios.xmanv.com/MobileProvision";
           document.body.appendChild(iframe);
-          that.mark=true
+          that.mark = true;
           setTimeout(function () {
             iframe.remove();
-            
           }, 5 * 60 * 1000);
         }, 3500);
       }
-       
-    }
+    },
   },
   mounted() {
+    let that=this;
     this.$nextTick(() => {
       var browser = {
         versions: (function () {
@@ -225,26 +233,26 @@ export default {
         ).toLowerCase(),
       };
       // 获取浏览器信息END
-      var androidDownload = "https://www.xmanv.com/resource/android.apk";
       $("#qrcode").qrcode({
         width: 300,
         height: 300,
-        text: androidDownload,
+        text: that.appDownload,
       });
       if (browser.versions.mobile) {
-        document.getElementById("PC").style.display = "none";
-        document.getElementById("H5").style.display = "block";
         var ua = navigator.userAgent.toLowerCase(); //获取判断用的对象
-        if (
-          ua.match(/MicroMessenger/i) == "micromessenger" ||
-          ua.match(/WeiBo/i) == "weibo"
-        ) {
+        if ( ua.match(/MicroMessenger/i) == "micromessenger" || ua.match(/WeiBo/i) == "weibo") {
           document.getElementById("safari").style.display = "block";
         } else {
           if (browser.versions.android) {
-            location.href = androidDownload;
+            document.getElementById("PC").style.display = "none";
+            document.getElementById("ANDROID").style.display = "block";
+            document.getElementById("IOS").style.display = "none";
+            // location.href = that.androidDownload;
           }
           if (browser.versions.ios) {
+            document.getElementById("PC").style.display = "none";
+            document.getElementById("ANDROID").style.display = "none";
+            document.getElementById("IOS").style.display = "block";
             setTimeout(function () {
               var iframe = document.createElement("iframe");
               iframe.style.display = "none"; // 防止影响页面
@@ -269,7 +277,8 @@ export default {
         }
       } else {
         document.getElementById("PC").style.display = "block";
-        document.getElementById("H5").style.display = "none";
+        document.getElementById("ANDROID").style.display = "none";
+        document.getElementById("IOS").style.display = "none";
         // setTimeout(function () {
         //       	location.href=androidDownload;
         // }, 1500);
@@ -424,5 +433,45 @@ export default {
 
 .starImg {
   display: inline-flex;
+}
+
+
+.mailFn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2000;
+    width: 100%;
+    height: 100%;
+    font: 18px/26px 'Microsoft Yahei';
+    color: #797979;
+    text-align: center;
+    background: #fff;
+}
+.mailFn span img{
+  height: 100%;
+  width: 100%;
+}
+.callAppBtn {
+    position: absolute;
+    bottom: 24%;
+    left: 15%;
+    font-size: 18px;
+    color: #ffffff;
+    background: #eb3d18;
+    width: 70%;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 52px;
+}
+.jianchi {
+    position: absolute;
+    bottom: 10%;
+    left: 30%;
+    font-size: 18px;
+    color: rgba(172,172,172,1);
+    width: 40%;
+    font-size: 13px;
+    text-decoration: underline;
 }
 </style>
