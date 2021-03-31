@@ -160,6 +160,9 @@
     <div class="mask maks-img" id="safari" style="display: none">
       <img alt="" src="./resource/safari.png" />
     </div>
+    <div class="mask maks-img" id="android" style="display: none">
+      <img alt="" src="./resource/android.png" />
+    </div>
   </div>
 </template>
 
@@ -241,7 +244,19 @@ export default {
       if (browser.versions.mobile) {
         var ua = navigator.userAgent.toLowerCase(); //获取判断用的对象
         if ( ua.match(/MicroMessenger/i) == "micromessenger" || ua.match(/WeiBo/i) == "weibo") {
-          document.getElementById("safari").style.display = "block";
+          
+          if (browser.versions.android) {
+            document.getElementById("android").style.display = "block";
+            document.getElementById("PC").style.display = "none";
+            document.getElementById("ANDROID").style.display = "block";
+            document.getElementById("IOS").style.display = "none";
+          }
+          if (browser.versions.ios) {
+            document.getElementById("safari").style.display = "block";
+            document.getElementById("PC").style.display = "none";
+            document.getElementById("ANDROID").style.display = "none";
+            document.getElementById("IOS").style.display = "block";
+          }
         } else {
           if (browser.versions.android) {
             document.getElementById("PC").style.display = "none";
